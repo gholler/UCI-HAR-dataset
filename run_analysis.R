@@ -115,6 +115,8 @@ measures <- X_train
 measures <- rbind(measures, X_test)
 
 
+
+
 ## create a summary_measures that summarize the average of measurements per activity and subjects
 # we have to get rid of type and row.id that uniquely identify each row 
 summary_measures <- measures %>% select(-row.id, -type) %>% group_by(activity, subject.id) %>% summarise_all(mean)
