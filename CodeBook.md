@@ -2,6 +2,7 @@
 
 
 > Written with [StackEdit](https://stackedit.io/).
+
 **Introduction**
 This dataset is a tidier and summarised version of a dataset from  Davide Anguita, Alessandro Ghio, Luca Oneto, Xavier Parra and Jorge L. Reyes-Ortiz ( *A Public Domain Dataset for Human Activity Recognition Using Smartphones. 21th European Symposium on Artificial Neural Networks, Computational Intelligence and Machine Learning, ESANN 2013. Bruges, Belgium 24-26 April 2013). see http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones for details of original work.
 
@@ -95,16 +96,13 @@ For this, we first use feature names for X_train.txt columns. To make column nam
 
  - replace "()" with ""
  - replace "-" with "."
- s- replace "," with "_"
- - replace "(" with "." and ")" with ""
+ - replace "," with "_"
  
-We remove duplicate columns, obtaining 477 column. As we are only interested on 'mean' and 'std' values, we only retain columns that have 'mean' and 'std', ignoring case. We finally 90 measurements columns.
+As we are only interested on mean and std variables, we only retain columns that have 'mean()' and 'std()'. We finally get 66 measurements columns.
+ 
+We bind together to X_train the columns of y_train and subject_train to add activity.id and subject.id to each row. We then join X_train and activity_labels on activitiy.id to get the activity label.
 
-To uniquely identify each row, we add a sequence column row.id on X_train, y_train and subject_train.
-We merge together y_train and activity_labels on activity.id, and then y_train and X_train on row.id to add activity label to X_train.
-We add a column type that is repeatedly filled with 'train' for X_train. We reorganise data a bit to have all factor columns on the left, starting with type, and all measurements on the right.
-
-We do the same with test sets, and merge X_train and Y_train in a 10299 rows long and 90 columns wide measures dataset.
+We do the same with test sets, and merge X_train and Y_train in a 10299 rows long and 68 columns wide measures dataset.
 
 We finally compute the mean of each measurement grouping by activity and subject to obtain the summary_measures.txt dataset that summarizes the previous dataset.
 
@@ -112,94 +110,80 @@ We finally compute the mean of each measurement grouping by activity and subject
 The resulting dataset has 2 factors:
 
  - activity : the activity label, which is one of:
- - subject.id : id of the person that took the test
+  -  WALKING
+ -  WALKING_UPSTAIRS
+ -  WALKING_DOWNSTAIRS
+ -  SITTING
+ -  STANDING
+ -  LAYING
  
- Remaining columns are the average of corresponding features in original dataset:
+ - subject.id : id of the person that took the test. An integer between 1 and 30
+ 
+ Remaining columns are the mean of corresponding features in original dataset:
 
-3                      tBodyAcc.mean.X
-4                      tBodyAcc.mean.Y
-5                      tBodyAcc.mean.Z
-6                       tBodyAcc.std.X
-7                       tBodyAcc.std.Y
-8                       tBodyAcc.std.Z
-9                   tGravityAcc.mean.X
-10                  tGravityAcc.mean.Y
-11                  tGravityAcc.mean.Z
-12                   tGravityAcc.std.X
-13                   tGravityAcc.std.Y
-14                   tGravityAcc.std.Z
-15                 tBodyAccJerk.mean.X
-16                 tBodyAccJerk.mean.Y
-17                 tBodyAccJerk.mean.Z
-18                  tBodyAccJerk.std.X
-19                  tBodyAccJerk.std.Y
-20                  tBodyAccJerk.std.Z
-21                    tBodyGyro.mean.X
-22                    tBodyGyro.mean.Y
-23                    tBodyGyro.mean.Z
-24                     tBodyGyro.std.X
-25                     tBodyGyro.std.Y
-26                     tBodyGyro.std.Z
-27                tBodyGyroJerk.mean.X
-28                tBodyGyroJerk.mean.Y
-29                tBodyGyroJerk.mean.Z
-30                 tBodyGyroJerk.std.X
-31                 tBodyGyroJerk.std.Y
-32                 tBodyGyroJerk.std.Z
-33                    tBodyAccMag.mean
-34                     tBodyAccMag.std
-35                 tGravityAccMag.mean
-36                  tGravityAccMag.std
-37                tBodyAccJerkMag.mean
-38                 tBodyAccJerkMag.std
-39                   tBodyGyroMag.mean
-40                    tBodyGyroMag.std
-41               tBodyGyroJerkMag.mean
-42                tBodyGyroJerkMag.std
-43                     fBodyAcc.mean.X
-44                     fBodyAcc.mean.Y
-45                     fBodyAcc.mean.Z
-46                      fBodyAcc.std.X
-47                      fBodyAcc.std.Y
-48                      fBodyAcc.std.Z
-49                 fBodyAcc.meanFreq.X
-50                 fBodyAcc.meanFreq.Y
-51                 fBodyAcc.meanFreq.Z
-52                 fBodyAccJerk.mean.X
-53                 fBodyAccJerk.mean.Y
-54                 fBodyAccJerk.mean.Z
-55                  fBodyAccJerk.std.X
-56                  fBodyAccJerk.std.Y
-57                  fBodyAccJerk.std.Z
-58             fBodyAccJerk.meanFreq.X
-59             fBodyAccJerk.meanFreq.Y
-60             fBodyAccJerk.meanFreq.Z
-61                    fBodyGyro.mean.X
-62                    fBodyGyro.mean.Y
-63                    fBodyGyro.mean.Z
-64                     fBodyGyro.std.X
-65                     fBodyGyro.std.Y
-66                     fBodyGyro.std.Z
-67                fBodyGyro.meanFreq.X
-68                fBodyGyro.meanFreq.Y
-69                fBodyGyro.meanFreq.Z
-70                    fBodyAccMag.mean
-71                     fBodyAccMag.std
-72                fBodyAccMag.meanFreq
-73            fBodyBodyAccJerkMag.mean
-74             fBodyBodyAccJerkMag.std
-75        fBodyBodyAccJerkMag.meanFreq
-76               fBodyBodyGyroMag.mean
-77                fBodyBodyGyroMag.std
-78           fBodyBodyGyroMag.meanFreq
-79           fBodyBodyGyroJerkMag.mean
-80            fBodyBodyGyroJerkMag.std
-81       fBodyBodyGyroJerkMag.meanFreq
-82          angle.tBodyAccMean_gravity
-83  angle.tBodyAccJerkMean_gravityMean
-84     angle.tBodyGyroMean_gravityMean
-85 angle.tBodyGyroJerkMean_gravityMean
-86                 angle.X_gravityMean
-87                 angle.Y_gravityMean
-88                 angle.Z_gravityMean
-
+-  tBodyAcc.mean.X
+-  tBodyAcc.mean.Y
+-  tBodyAcc.mean.Z
+-  tBodyAcc.std.X
+-  tBodyAcc.std.Y
+-  tBodyAcc.std.Z
+-  tGravityAcc.mean.X
+-  tGravityAcc.mean.Y
+-  tGravityAcc.mean.Z
+-  tGravityAcc.std.X
+-  tGravityAcc.std.Y
+-  tGravityAcc.std.Z
+-  tBodyAccJerk.mean.X
+-  tBodyAccJerk.mean.Y
+-  tBodyAccJerk.mean.Z
+-  tBodyAccJerk.std.X
+-  tBodyAccJerk.std.Y
+-  tBodyAccJerk.std.Z
+-  tBodyGyro.mean.X
+-  tBodyGyro.mean.Y
+-  tBodyGyro.mean.Z
+-  tBodyGyro.std.X
+-  tBodyGyro.std.Y
+-  tBodyGyro.std.Z
+-  tBodyGyroJerk.mean.X
+-  tBodyGyroJerk.mean.Y
+-  tBodyGyroJerk.mean.Z
+-  tBodyGyroJerk.std.X
+-  tBodyGyroJerk.std.Y
+-  tBodyGyroJerk.std.Z
+-  tBodyAccMag.mean
+-  tBodyAccMag.std
+-  tGravityAccMag.mean
+-  tGravityAccMag.std
+-  tBodyAccJerkMag.mean
+-  tBodyAccJerkMag.std
+-  tBodyGyroMag.mean
+-  tBodyGyroMag.std
+-  tBodyGyroJerkMag.mean
+-  tBodyGyroJerkMag.std
+-  fBodyAcc.mean.X
+-  fBodyAcc.mean.Y
+-  fBodyAcc.mean.Z
+-  fBodyAcc.std.X
+-  fBodyAcc.std.Y
+-  fBodyAcc.std.Z
+-  fBodyAccJerk.mean.X
+-  fBodyAccJerk.mean.Y
+-  fBodyAccJerk.mean.Z
+-  fBodyAccJerk.std.X
+-  fBodyAccJerk.std.Y
+-  fBodyAccJerk.std.Z
+-  fBodyGyro.mean.X
+-  fBodyGyro.mean.Y
+-  fBodyGyro.mean.Z
+-  fBodyGyro.std.X
+-  fBodyGyro.std.Y
+-  fBodyGyro.std.Z
+-  fBodyAccMag.mean
+-  fBodyAccMag.std
+-  fBodyBodyAccJerkMag.mean
+-  fBodyBodyAccJerkMag.std
+-  fBodyBodyGyroMag.mean
+-  fBodyBodyGyroMag.std
+-  fBodyBodyGyroJerkMag.mean
+-  fBodyBodyGyroJerkMag.std
